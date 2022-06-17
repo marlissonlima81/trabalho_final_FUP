@@ -1,0 +1,4 @@
+ 0 - Leite 7.99
+ 1 - Arroz 4.99
+ 2 - Queijo 2.99
+ 3 - Maça 1.99
