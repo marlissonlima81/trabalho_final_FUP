@@ -2,19 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-//ATENÇÃO:Apenas uma ideia inicial para o trabalho
-//falta adicionar caixa,mais produtos,metodo de pagamento,entre outros
 
+float Caixa();
 void MenuProduto();
 void MenuPrincipal();
 void AdicionarProdutos();
+
 
 typedef struct{
     float preco;
 
 }DadosProdutos;
-//falta adicionar mais produtos
+//falta adicionar mais produtos e encontrar uma maneira mais pratica de adicionar novos produtos pelo arquivo de texto
 DadosProdutos leite,arroz,queijo,maca;
+
+
+
+
 
 
 
@@ -60,14 +64,46 @@ void AdicionarProdutos(){
         }
 
         if(escolherproduto=='P'){
-            carrinho;
             printf("R$:%.2f\n",carrinho);
             printf("Vá ao caixa para realizar o pagamento\n");
+            Caixa(carrinho);
             break;
         }
     }   
 
 }
+float Caixa(double valor_total){
+    char escolherPagamento;
+    system("clear");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n ");
+    printf(" Bem vindo ao Caixa!\n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n");
+    printf("Sua compra totalizou em R$: %.2f\n",valor_total);
+
+    printf("Qual a forma de pagamento?\n Pix[P]\n Dinheiro[D]\n Cartão[C]\n ");
+    printf("Digite a letra correspondente ao pagamento desejado: ");
+    scanf(" %c",&escolherPagamento);
+
+    if(escolherPagamento=='P'){
+        printf("\nQR CODE DO PIX: \n");
+        char qr_code[100];
+        FILE *arquivo_pix = fopen("pix.txt","r");
+        while(fgets(qr_code,100,arquivo_pix)!=NULL){
+        printf("%s",qr_code);
+        }
+
+        fclose(arquivo_pix);
+    
+
+    }
+    else if(escolherPagamento=='D'){
+        
+    }
+
+
+
+}
+
 
 void MenuProdutos(){
     
