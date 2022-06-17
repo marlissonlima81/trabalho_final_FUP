@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+//ATENÇÃO:Apenas uma ideia inicial para o trabalho
+//falta adicionar caixa,mais produtos,metodo de pagamento,entre outros
 
 void MenuProduto();
 void MenuPrincipal();
