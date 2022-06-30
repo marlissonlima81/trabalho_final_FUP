@@ -25,6 +25,7 @@ valor_produto leite,arroz,feijao,macarrao,oleo;
 
 
 
+
 //marlisson
 //parte solicitada onde se usa um vetor de estrutura alocado dinamicamente
 void Estoque(){
@@ -56,7 +57,7 @@ void Estoque(){
             fprintf(arquivo_produtos,"%s - ",lista_de_produtos[i].nome);
             fprintf(arquivo_produtos,"%s\n",lista_de_produtos[i].preco);
         }
-        fclose(arquivo_produtos);
+        
         printf("Total de produtos adicionados: %d\n",qtdDeProdutosEstoque);
        
         printf("Você deseja remover algum produto do estoque?\n");
@@ -73,12 +74,16 @@ void Estoque(){
                     qtdDeProdutosEstoque--;
 
                     break;
-                }
-            }
-            
 
+                }
+                
+            }
+            fclose(arquivo_produtos);
             
+        
+        
         }
+        
         else if(escolha=='N'){
             printf("Deseja voltar ao menu principal?");
             scanf(" %c",&voltarmenu);
@@ -101,48 +106,55 @@ void Estoque(){
 void AdicionarProdutos(){
     float carrinho = 0;
     char escolherproduto;
-    float escolherquantidade;
+    int escolherquantidade;
     float valor_total;
     leite.preco_produto = 7.99;
     arroz.preco_produto = 4.99;
     feijao.preco_produto = 5.99;
     oleo.preco_produto = 3.99;
     macarrao.preco_produto = 6.99;
-    
+    FILE *arquivo_carrinho = fopen("carrinho.txt","a");
 
 
     while(1){
         printf("Digite o número correspondente ao produto ou 'P' para parar de adicionar produtos ao carrinho: \n");
         scanf(" %c",&escolherproduto);
         if(escolherproduto=='0'){
+            char convertido[100];
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%f",&escolherquantidade);
+            scanf("%d",&escolherquantidade);
             carrinho+=arroz.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Arroz - %d",escolherquantidade);
             continue;
         }
         if(escolherproduto=='1'){
+            char convertido[100];
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%f",&escolherquantidade);
+            scanf("%d",&escolherquantidade);
             carrinho+=leite.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Leite - %d",escolherquantidade);
             continue;
         }
         if(escolherproduto=='2'){
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%f",&escolherquantidade);
+            scanf("%d",&escolherquantidade);
             carrinho+=feijao.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Feijao - %d",escolherquantidade);
             continue;
         }
         if(escolherproduto=='3'){
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%f",&escolherquantidade);
+            scanf("%d",&escolherquantidade);
             carrinho+=oleo.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Oleo - %d",escolherquantidade);
             continue;
         }
 
         if(escolherproduto=='4'){
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%f",&escolherquantidade);
+            scanf("%d",&escolherquantidade);
             carrinho+=macarrao.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Macarrao - %d",escolherquantidade);
             continue;
 
         }
@@ -153,7 +165,10 @@ void AdicionarProdutos(){
             Caixa(carrinho);
             break;
         }
-    }   
+
+    }  
+    fclose(arquivo_carrinho);
+
 
 }
 float Caixa(double valor_total){
