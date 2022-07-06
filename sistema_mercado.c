@@ -6,13 +6,14 @@
 float Caixa();
 void MenuProduto();
 void MenuPrincipal();
+void MostrarCarrinho();
 //void AdicionarProdutos();
 
 
 typedef struct{
     char nome[100];
     char preco[100];
-    char codigo[100];
+    char quantidade[100];
 
 }DadosProdutos;
 
@@ -21,54 +22,60 @@ typedef struct{
 
 }valor_produto;
 
-valor_produto leite,arroz,feijao,macarrao,oleo;
+valor_produto leite,arroz,feijao,macarrao,oleo,macarrao,queijo,batata,carne_bovina,frango,peixe,banana;
 
 
 
 
-//marlisson
-//parte solicitada onde se usa um vetor de estrutura alocado dinamicamente
 void Estoque(){
-    system("clear");
+    system("cls");
     char escolha;
     char voltarmenu;
-   
-    printf(" Digite a quantidade de produtos para adicionar ao estoque:");
+
+    char estoque[50];
+    
+    FILE *arquivo_estoque;
+    arquivo_estoque = fopen("estoque.txt","a+");
+    while(fgets(estoque,50,arquivo_estoque)!=NULL){
+        printf("\n%s",estoque);
+    }
+    
+    
+    printf("Digite a quantidade de produtos para adicionar ao estoque:");
     int qtdDeProdutosEstoque;
     scanf("%d",&qtdDeProdutosEstoque);
     DadosProdutos *lista_de_produtos = (DadosProdutos*) malloc(qtdDeProdutosEstoque*sizeof(DadosProdutos));
 
     if(qtdDeProdutosEstoque==0){
-        system("clear");
+        system("cls");
         MenuPrincipal();
     }
     
     else{
-        printf("Escreva o nome do produto, o preço dele e o codigo(Siga a ordem!!!)\n");
+        printf("Escreva o nome do produto, o preco dele e a quantidade(Pressione Enter sempre que terminar de escrever uma informacao)\n");
         for(int i=0;i<qtdDeProdutosEstoque;i++){
             scanf(" %[^\n]",lista_de_produtos[i].nome);
             scanf(" %[^\n]",lista_de_produtos[i].preco);
-            scanf(" %[^\n]",lista_de_produtos[i].codigo);
+            scanf(" %[^\n]",lista_de_produtos[i].quantidade);
         }
-        FILE *arquivo_produtos;
-        arquivo_produtos = fopen("produtos.txt","a");
+        
         for(int i=0;i<qtdDeProdutosEstoque;i++){
-            fprintf(arquivo_produtos,"%s - ",lista_de_produtos[i].codigo);
-            fprintf(arquivo_produtos,"%s - ",lista_de_produtos[i].nome);
-            fprintf(arquivo_produtos,"%s\n",lista_de_produtos[i].preco);
+            fprintf(arquivo_estoque,"%s unidades - ",lista_de_produtos[i].quantidade);
+            fprintf(arquivo_estoque,"%s - ",lista_de_produtos[i].nome);
+            fprintf(arquivo_estoque,"%s\n",lista_de_produtos[i].preco);
         }
         
         printf("Total de produtos adicionados: %d\n",qtdDeProdutosEstoque);
        
-        printf("Você deseja remover algum produto do estoque?\n");
-        printf("Digite 'R' para remover e 'N' para não\n");
+        printf("Voce deseja remover algum produto do estoque?\n");
+        printf("Digite 'R' para remover e 'N' para nao\n");
         scanf(" %c",&escolha);
         if(escolha=='R'){
-            char codigo_produto[100];
-            printf("Digite o codigo do produto para remover do estoque\n");
-            scanf(" %s",codigo_produto);
+            char nome_produto[100];
+            printf("Digite o nome do produto para remover do estoque\n");
+            scanf(" %s",nome_produto);
             for(int i=0;i<qtdDeProdutosEstoque;i++){
-                if(lista_de_produtos[i].codigo==codigo_produto){
+                if(lista_de_produtos[i].nome==nome_produto){
                     lista_de_produtos[i] = lista_de_produtos[qtdDeProdutosEstoque-1];
                     lista_de_produtos = (DadosProdutos*) realloc(lista_de_produtos,(qtdDeProdutosEstoque-1)*sizeof(DadosProdutos));
                     qtdDeProdutosEstoque--;
@@ -78,20 +85,18 @@ void Estoque(){
                 }
                 
             }
-            fclose(arquivo_produtos);
+            fclose(arquivo_estoque);
             
         
         
         }
         
         else if(escolha=='N'){
-            printf("Deseja voltar ao menu principal?");
-            scanf(" %c",&voltarmenu);
-            if(voltarmenu=='S'){
-                system("clear");
-                MenuPrincipal();
+            printf("Voltando ao menu principal.....");
+            system("cls");
+            MenuPrincipal();
 
-            }
+            
         }
 
 
@@ -102,7 +107,7 @@ void Estoque(){
 }
 
 
-//matheus
+
 void AdicionarProdutos(){
     float carrinho = 0;
     char escolherproduto;
@@ -113,53 +118,99 @@ void AdicionarProdutos(){
     feijao.preco_produto = 5.99;
     oleo.preco_produto = 3.99;
     macarrao.preco_produto = 6.99;
+    queijo.preco_produto=5.99;
+    batata.preco_produto=3.99;
+    carne_bovina.preco_produto=20.00;
+    frango.preco_produto=15.99;
+    peixe.preco_produto=10.00;
+    banana.preco_produto=1.99;
+    
     FILE *arquivo_carrinho = fopen("carrinho.txt","a");
 
 
     while(1){
-        printf("Digite o número correspondente ao produto ou 'P' para parar de adicionar produtos ao carrinho: \n");
+        printf("Digite o numero correspondente ao produto ou 'P' para parar de adicionar produtos ao carrinho: \n");
         scanf(" %c",&escolherproduto);
-        if(escolherproduto=='0'){
-            char convertido[100];
+        switch(escolherproduto){
+
+
+        
+            case '0':
             printf("Agora escolha a quantidade de unidades: \n");
             scanf("%d",&escolherquantidade);
             carrinho+=arroz.preco_produto*escolherquantidade;
-            fprintf(arquivo_carrinho,"Arroz - %d",escolherquantidade);
+            fprintf(arquivo_carrinho,"Arroz - %d unidades",escolherquantidade);
             continue;
-        }
-        if(escolherproduto=='1'){
-            char convertido[100];
+        
+        
+            case '1':
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%d",&escolherquantidade);
+            scanf(" %d",&escolherquantidade);
             carrinho+=leite.preco_produto*escolherquantidade;
-            fprintf(arquivo_carrinho,"Leite - %d",escolherquantidade);
+            fprintf(arquivo_carrinho,"Leite - %d unidades",escolherquantidade);
             continue;
-        }
-        if(escolherproduto=='2'){
+        
+            case '2':
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%d",&escolherquantidade);
+            scanf(" %d",&escolherquantidade);
             carrinho+=feijao.preco_produto*escolherquantidade;
-            fprintf(arquivo_carrinho,"Feijao - %d",escolherquantidade);
+            fprintf(arquivo_carrinho,"Feijao - %d unidades",escolherquantidade);
             continue;
-        }
-        if(escolherproduto=='3'){
+        
+            case '3':
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%d",&escolherquantidade);
+            scanf(" %d",&escolherquantidade);
             carrinho+=oleo.preco_produto*escolherquantidade;
-            fprintf(arquivo_carrinho,"Oleo - %d",escolherquantidade);
+            fprintf(arquivo_carrinho,"Oleo - %d unidades",escolherquantidade);
             continue;
-        }
 
-        if(escolherproduto=='4'){
+            case '4':
             printf("Agora escolha a quantidade de unidades: \n");
-            scanf("%d",&escolherquantidade);
+            scanf(" %d",&escolherquantidade);
             carrinho+=macarrao.preco_produto*escolherquantidade;
-            fprintf(arquivo_carrinho,"Macarrao - %d",escolherquantidade);
+            fprintf(arquivo_carrinho,"Macarrao - %d unidades",escolherquantidade);
             continue;
 
-        }
+            case '5':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=queijo.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Queijo - %d unidades",escolherquantidade);
+            continue;
+            
+            case '6':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=batata.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Batata - %d unidades",escolherquantidade);
+            continue;
+            
+            case '7':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=carne_bovina.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Carne Bovina - %d unidades",escolherquantidade);
+            continue;
+            case '8':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=frango.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Frango - %d unidades",escolherquantidade);
+            continue;
+            case '9':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=peixe.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Peixe - %d unidades",escolherquantidade);
+            continue;
+            case '10':
+            printf("Agora escolha a quantidade de unidades: \n");
+            scanf(" %d",&escolherquantidade);
+            carrinho+=banana.preco_produto*escolherquantidade;
+            fprintf(arquivo_carrinho,"Banana - %d unidades",escolherquantidade);
+            continue;
 
-        if(escolherproduto=='P'){
+            case 'P':
             printf("R$:%.2f\n",carrinho);
             printf("Vá ao caixa para realizar o pagamento\n");
             Caixa(carrinho);
@@ -175,10 +226,13 @@ float Caixa(double valor_total){
     char escolherPagamento;
     float dinheiroCliente;
     float dinheiroRestante;
-    system("clear");
+    system("cls");
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n ");
     printf(" Bem vindo ao Caixa!\n");
-    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n");
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n\n");
+    printf(".....Mostrando Carrinho.....");
+    MostrarCarrinho();
+    printf("\n");
     printf("Sua compra totalizou em R$: %.2f\n",valor_total);
 
     printf("Qual a forma de pagamento?\n Pix[P]\n Dinheiro[D]\n ");
@@ -232,7 +286,7 @@ void MenuProdutos(){
     printf("\nDigite 'C' para adicionar o produto ao carrinho \nOu digite 'V' para voltar ao menu principal: \n");
     scanf(" %c",&opcaomenuProdutos);
     if(opcaomenuProdutos=='V'){
-        system("clear");
+        system("cls");
         MenuPrincipal();
     }
     else if(opcaomenuProdutos=='C'){
@@ -243,7 +297,26 @@ void MenuProdutos(){
 
 
 }
-//adicionar produtos diretamente no arquivo txt
+
+void MostrarCarrinho(){
+    FILE *vercarrinho;
+    char texto_str[50];
+    
+    vercarrinho = fopen("carrinho.txt","r");
+
+    while(fgets(texto_str,50,vercarrinho)!=NULL){
+        printf("\n%s",texto_str);
+    }
+
+    fclose(vercarrinho);
+
+
+
+
+
+
+}
+
 void VerProduto(){
     FILE *produtos;
     char texto_str[50];
@@ -258,7 +331,7 @@ void VerProduto(){
     
 
 }
-//kaynan
+
 void MenuPrincipal(){
     int opcaomenu;
     
@@ -268,19 +341,21 @@ void MenuPrincipal(){
 
     printf("\n\n /=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/ \n");
     printf(" 1-VER PRODUTOS DISPONIVEIS\n");
-    printf(" 2-ESTOQUE(APENAS FUNCIONÁRIOS)\n");
+    printf(" 2-ESTOQUE(APENAS FUNCIONARIOS)\n");
     printf(" 3-SAIR\n");
     printf(" /=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/\n");
-    printf(" \nDigite a opção: ");
+    printf(" \nDigite a opcao: ");
     scanf("%d",&opcaomenu);
 
     if(opcaomenu==1){
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~");
+        system("cls");
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         VerProduto();
-        printf("\n~~~~~~~~~~~~~~~~~~~~~~");
+        printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         MenuProdutos();
     }
     else if(opcaomenu==2){
+        system("cls");
         Estoque();
     }
     else if(opcaomenu==3){
