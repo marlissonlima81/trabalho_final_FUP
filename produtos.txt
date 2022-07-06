@@ -3,4 +3,9 @@
 2 - feijao - 5.99
 3 - oleo - 3.99
 4 - macarrao - 6.99
-0 - leite - 7.99
+5 - queijo - 5.99
+6 - batata - 3.99
+7 - carne bovina - 20.00
+8 - frango - 15.99
+9 - peixe - 10.00
+10 - banana - 1.99
